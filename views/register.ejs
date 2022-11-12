@@ -1,5 +1,5 @@
 <!-- Wappler include head-page="layouts/main" fontawesome_5="cdn" bootstrap5="local" is="dmx-app" id="register" appConnect="local" components="{dmxValidator:{},dmxBrowser:{},dmxNotifications:{}}" -->
-<dmx-notifications id="notifies1"></dmx-notifications>
+<dmx-notifications id="notifies1" align="full" newest-on-top="true"></dmx-notifications>
 <div is="dmx-browser" id="browser1"></div>
 <meta name="ac:route" content="/register">
 <div class="container">
@@ -15,6 +15,12 @@
                 <div class="row align-items-center">
                     <div class="col mt-4">
                         <input type="text" id="inp_firstname" name="firstname" class="form-control" placeholder="First Name" required="">
+                    </div>
+                    <div class="col mt-4 visually-hidden">
+                        <input type="hidden" id="hidden_1" name="hidden_spam_1" class="form-control" required="">
+                    </div>
+                    <div class="col mt-4 visually-hidden">
+                        <input type="hidden" id="hidden_2" name="hidden_spam_2" class="form-control" required="">
                     </div>
                     <div class="col mt-4">
                         <input type="text" id="inp_last_name" name="lastname" class="form-control" placeholder="Last Name" required="">
