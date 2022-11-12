@@ -75,6 +75,12 @@
         },
         "name": "hidden_spam_2"
       }
+    ],
+    "$_SESSION": [
+      {
+        "type": "text",
+        "name": "regcode"
+      }
     ]
   },
   "exec": {
@@ -109,6 +115,26 @@
         "action": "condition",
         "options": {
           "if": "{{$_POST.hidden_spam_1.length()>0}}",
+          "then": {
+            "steps": {
+              "name": "Unauthorised",
+              "module": "core",
+              "action": "response",
+              "options": {
+                "status": 401,
+                "data": "Unauthorised"
+              }
+            }
+          }
+        },
+        "outputType": "boolean"
+      },
+      {
+        "name": "",
+        "module": "core",
+        "action": "condition",
+        "options": {
+          "if": "{{$_POST.hidden_spam_2!=$_SESSION.regcode}}",
           "then": {
             "steps": {
               "name": "Unauthorised",
