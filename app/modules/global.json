@@ -1,0 +1,9 @@
+{
+  "meta": {
+    "options": {
+      "linkedFile": "/views/register.ejs",
+      "linkedForm": "register1"
+    }
+  },
+  "exec": {}
+}

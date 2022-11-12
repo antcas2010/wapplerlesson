@@ -1,0 +1,47 @@
+{
+  "name": "communityweb",
+  "module": "auth",
+  "action": "provider",
+  "options": {
+    "secret": "VaoGvrRml0R8ph9",
+    "provider": "Database",
+    "connection": "db",
+    "passwordVerify": true,
+    "users": {
+      "table": "user",
+      "identity": "iuser_d",
+      "username": "email",
+      "password": "password"
+    },
+    "permissions": {
+      "Administrator": {
+        "table": "role",
+        "identity": "user_id",
+        "conditions": [
+          {
+            "column": "role",
+            "operator": "=",
+            "value": "A"
+          }
+        ]
+      },
+      "Member": {
+        "table": "role",
+        "identity": "user_id",
+        "conditions": [
+          {
+            "column": "role",
+            "operator": "=",
+            "value": "M"
+          }
+        ]
+      }
+    }
+  },
+  "meta": [
+    {
+      "name": "identity",
+      "type": "text"
+    }
+  ]
+}
