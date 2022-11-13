@@ -244,7 +244,7 @@
         "module": "core",
         "action": "setvalue",
         "options": {
-          "value": "01,2,3,4,5,6,7,8,9,A,B,C,D"
+          "value": "0,1,2,3,4,5,6,7,8,9,A,B,C,D"
         },
         "meta": [],
         "outputType": "text"
@@ -340,20 +340,26 @@
               }
             ],
             "table": "user",
+            "returning": "iuser_d",
+            "query": "UPDATE user\nSET authcode = :P1 /* {{g_mycode}} */\nWHERE iuser_d = :P2 /* {{insert.identity}} */",
+            "params": [
+              {
+                "name": ":P1",
+                "type": "expression",
+                "value": "{{g_mycode}}",
+                "test": ""
+              },
+              {
+                "operator": "equal",
+                "type": "expression",
+                "name": ":P2",
+                "value": "{{insert.identity}}",
+                "test": ""
+              }
+            ],
             "wheres": {
               "condition": "AND",
               "rules": [
-                {
-                  "id": "iuser_d",
-                  "field": "iuser_d",
-                  "type": "double",
-                  "operator": "equal",
-                  "value": "{{$_POST.iuser_d}}",
-                  "data": {
-                    "column": "iuser_d"
-                  },
-                  "operation": "="
-                },
                 {
                   "id": "iuser_d",
                   "field": "iuser_d",
@@ -368,31 +374,7 @@
               ],
               "conditional": null,
               "valid": true
-            },
-            "returning": "iuser_d",
-            "query": "UPDATE user\nSET authcode = :P1 /* {{g_mycode}} */\nWHERE iuser_d = :P2 /* {{$_POST.iuser_d}} */ AND iuser_d = :P3 /* {{insert.identity}} */",
-            "params": [
-              {
-                "name": ":P1",
-                "type": "expression",
-                "value": "{{g_mycode}}",
-                "test": ""
-              },
-              {
-                "operator": "equal",
-                "type": "expression",
-                "name": ":P2",
-                "value": "{{$_POST.iuser_d}}",
-                "test": ""
-              },
-              {
-                "operator": "equal",
-                "type": "expression",
-                "name": ":P3",
-                "value": "{{insert.identity}}",
-                "test": ""
-              }
-            ]
+            }
           }
         },
         "meta": [
@@ -408,13 +390,14 @@
         "action": "send",
         "options": {
           "instance": "mail",
-          "subject": "Your authorization code",
+          "subject": "Your authorisation code",
           "fromName": "Website",
           "fromEmail": "antcas2016@gmail.com",
           "toName": "{{$_POST.lastname+$_POST.firstname}}",
           "toEmail": "{{$_POST.email}}",
           "body": "Your authorisation code is : {{g_mycode}}"
-        }
+        },
+        "disabled": true
       },
       {
         "name": "insert_role",
