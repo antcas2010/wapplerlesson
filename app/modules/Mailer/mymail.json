@@ -1,0 +1,11 @@
+{
+  "name": "mymail",
+  "module": "mail",
+  "action": "setup",
+  "options": {
+    "host": "mailgate.otenet.gr",
+    "port": 587,
+    "username": "antcas@otenet.gr",
+    "password": "antcas*"
+  }
+}

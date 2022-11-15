@@ -1,0 +1,188 @@
+{
+  "meta": {
+    "options": {
+      "linkedFile": "/views/validating.ejs",
+      "linkedForm": "form1"
+    },
+    "$_POST": [
+      {
+        "type": "text",
+        "fieldName": "email_v",
+        "options": {
+          "rules": {
+            "core:required": {
+              "param": ""
+            },
+            "core:email": {
+              "param": ""
+            }
+          }
+        },
+        "name": "email_v"
+      },
+      {
+        "type": "text",
+        "fieldName": "code_v",
+        "options": {
+          "rules": {
+            "core:required": {
+              "param": ""
+            },
+            "core:maxlength": {
+              "param": "6"
+            },
+            "core:minlength": {
+              "param": "6"
+            }
+          }
+        },
+        "name": "code_v"
+      },
+      {
+        "type": "number",
+        "name": "iuser_d"
+      }
+    ]
+  },
+  "exec": {
+    "steps": [
+      {
+        "name": "query_validation",
+        "module": "dbconnector",
+        "action": "single",
+        "options": {
+          "connection": "db",
+          "sql": {
+            "type": "SELECT",
+            "columns": [
+              {
+                "table": "user",
+                "column": "email"
+              },
+              {
+                "table": "user",
+                "column": "authcode"
+              }
+            ],
+            "params": [
+              {
+                "operator": "equal",
+                "type": "expression",
+                "name": ":P1",
+                "value": "{{$_POST.email_v}}",
+                "test": ""
+              }
+            ],
+            "table": {
+              "name": "user"
+            },
+            "primary": "iuser_d",
+            "joins": [],
+            "wheres": {
+              "condition": "AND",
+              "rules": [
+                {
+                  "id": "user.email",
+                  "field": "user.email",
+                  "type": "string",
+                  "operator": "equal",
+                  "value": "{{$_POST.email_v}}",
+                  "data": {
+                    "table": "user",
+                    "column": "email",
+                    "type": "text",
+                    "columnObj": {
+                      "type": "string",
+                      "maxLength": 255,
+                      "primary": false,
+                      "unique": false,
+                      "nullable": true,
+                      "name": "email"
+                    }
+                  },
+                  "operation": "="
+                }
+              ],
+              "conditional": null,
+              "valid": true
+            },
+            "query": "SELECT email, authcode\nFROM user\nWHERE email = :P1 /* {{$_POST.email_v}} */"
+          }
+        },
+        "output": true,
+        "meta": [
+          {
+            "type": "text",
+            "name": "email"
+          },
+          {
+            "type": "text",
+            "name": "authcode"
+          }
+        ],
+        "outputType": "object"
+      },
+      {
+        "name": "update",
+        "module": "dbupdater",
+        "action": "update",
+        "options": {
+          "connection": "db",
+          "sql": {
+            "type": "update",
+            "values": [
+              {
+                "table": "user",
+                "column": "validated",
+                "type": "datetime",
+                "value": "{{NOW_UTC}}"
+              }
+            ],
+            "table": "user",
+            "wheres": {
+              "condition": "AND",
+              "rules": [
+                {
+                  "id": "email",
+                  "field": "email",
+                  "type": "string",
+                  "operator": "equal",
+                  "value": "{{$_POST.email_v}}",
+                  "data": {
+                    "column": "email"
+                  },
+                  "operation": "="
+                }
+              ],
+              "conditional": null,
+              "valid": true
+            },
+            "returning": "iuser_d",
+            "query": "UPDATE user\nSET validated = :P1 /* {{NOW_UTC}} */\nWHERE email = :P2 /* {{$_POST.email_v}} */",
+            "params": [
+              {
+                "name": ":P1",
+                "type": "expression",
+                "value": "{{NOW_UTC}}",
+                "test": ""
+              },
+              {
+                "operator": "equal",
+                "type": "expression",
+                "name": ":P2",
+                "value": "{{$_POST.email_v}}",
+                "test": ""
+              }
+            ]
+          }
+        },
+        "meta": [
+          {
+            "name": "affected",
+            "type": "number"
+          }
+        ]
+      }
+    ]
+  }
+}

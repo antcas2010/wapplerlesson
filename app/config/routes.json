@@ -10,6 +10,11 @@
       "path": "/register",
       "page": "register",
       "layout": "main"
+    },
+    {
+      "path": "/validating",
+      "page": "validating",
+      "layout": "main"
     }
   ]
 }

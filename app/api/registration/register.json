@@ -250,7 +250,7 @@
         "outputType": "text"
       },
       {
-        "name": "CODEARRAY",
+        "name": "codearray",
         "module": "core",
         "action": "setvalue",
         "options": {
@@ -265,7 +265,7 @@
         "action": "setvalue",
         "options": {
           "key": "g_randomarray",
-          "value": "{{CODEARRAY.randomize()}}"
+          "value": "{{codearray.randomize()}}"
         },
         "meta": [],
         "outputType": "text"
@@ -319,6 +319,11 @@
           {
             "name": "$value",
             "type": "object"
+          },
+          {
+            "name": "mycode",
+            "type": "text",
+            "sub": []
           }
         ],
         "outputType": "array"
@@ -389,15 +394,14 @@
         "module": "mail",
         "action": "send",
         "options": {
-          "instance": "mail",
-          "subject": "Your authorisation code",
-          "fromName": "Website",
-          "fromEmail": "antcas2016@gmail.com",
+          "instance": "mymail",
+          "subject": "Testing",
+          "fromName": "Antony",
+          "fromEmail": "antcas@cosmote.gr",
           "toName": "{{$_POST.lastname+$_POST.firstname}}",
           "toEmail": "{{$_POST.email}}",
-          "body": "Your authorisation code is : {{g_mycode}}"
-        },
-        "disabled": true
+          "body": "Your Authorisation code: {{g_mycode}}"
+        }
       },
       {
         "name": "insert_role",
