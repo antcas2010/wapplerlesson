@@ -41,6 +41,10 @@
       {
         "type": "number",
         "name": "iuser_d"
+      },
+      {
+        "type": "text",
+        "name": "authcode"
       }
     ]
   },
@@ -57,11 +61,7 @@
             "columns": [
               {
                 "table": "user",
-                "column": "email"
-              },
-              {
-                "table": "user",
-                "column": "authcode"
+                "column": "iuser_d"
               }
             ],
             "params": [
@@ -69,6 +69,13 @@
                 "operator": "equal",
                 "type": "expression",
                 "name": ":P1",
+                "value": "{{$_POST.code_v}}",
+                "test": ""
+              },
+              {
+                "operator": "equal",
+                "type": "expression",
+                "name": ":P2",
                 "value": "{{$_POST.email_v}}",
                 "test": ""
               }
@@ -78,9 +85,31 @@
             },
             "primary": "iuser_d",
             "joins": [],
+            "query": "SELECT iuser_d\nFROM user\nWHERE authcode = :P1 /* {{$_POST.code_v}} */ AND email = :P2 /* {{$_POST.email_v}} */",
             "wheres": {
               "condition": "AND",
               "rules": [
+                {
+                  "id": "user.authcode",
+                  "field": "user.authcode",
+                  "type": "string",
+                  "operator": "equal",
+                  "value": "{{$_POST.code_v}}",
+                  "data": {
+                    "table": "user",
+                    "column": "authcode",
+                    "type": "text",
+                    "columnObj": {
+                      "type": "string",
+                      "maxLength": 255,
+                      "primary": false,
+                      "unique": false,
+                      "nullable": true,
+                      "name": "authcode"
+                    }
+                  },
+                  "operation": "="
+                },
                 {
                   "id": "user.email",
                   "field": "user.email",
@@ -105,83 +134,106 @@
               ],
               "conditional": null,
               "valid": true
-            },
-            "query": "SELECT email, authcode\nFROM user\nWHERE email = :P1 /* {{$_POST.email_v}} */"
+            }
           }
         },
         "output": true,
         "meta": [
           {
-            "type": "text",
-            "name": "email"
-          },
-          {
-            "type": "text",
-            "name": "authcode"
+            "type": "number",
+            "name": "iuser_d"
           }
         ],
         "outputType": "object"
       },
       {
-        "name": "update",
-        "module": "dbupdater",
-        "action": "update",
+        "name": "",
+        "module": "core",
+        "action": "condition",
         "options": {
-          "connection": "db",
-          "sql": {
-            "type": "update",
-            "values": [
-              {
-                "table": "user",
-                "column": "validated",
-                "type": "datetime",
-                "value": "{{NOW_UTC}}"
-              }
-            ],
-            "table": "user",
-            "wheres": {
-              "condition": "AND",
-              "rules": [
-                {
-                  "id": "email",
-                  "field": "email",
-                  "type": "string",
-                  "operator": "equal",
-                  "value": "{{$_POST.email_v}}",
-                  "data": {
-                    "column": "email"
+          "if": "{{query_validation}}",
+          "then": {
+            "steps": {
+              "name": "update",
+              "module": "dbupdater",
+              "action": "update",
+              "options": {
+                "connection": "db",
+                "sql": {
+                  "type": "update",
+                  "values": [
+                    {
+                      "table": "user",
+                      "column": "validated",
+                      "type": "datetime",
+                      "value": "{{NOW_UTC}}"
+                    },
+                    {
+                      "table": "user",
+                      "column": "authcode",
+                      "type": "text",
+                      "value": ""
+                    }
+                  ],
+                  "table": "user",
+                  "wheres": {
+                    "condition": "AND",
+                    "rules": [
+                      {
+                        "id": "iuser_d",
+                        "field": "iuser_d",
+                        "type": "double",
+                        "operator": "equal",
+                        "value": "{{query_validation.iuser_d}}",
+                        "data": {
+                          "column": "iuser_d"
+                        },
+                        "operation": "="
+                      }
+                    ],
+                    "conditional": null,
+                    "valid": true
                   },
-                  "operation": "="
+                  "returning": "iuser_d",
+                  "query": "UPDATE user\nSET validated = :P1 /* {{NOW_UTC}} */, authcode = ''\nWHERE iuser_d = :P2 /* {{query_validation.iuser_d}} */",
+                  "params": [
+                    {
+                      "name": ":P1",
+                      "type": "expression",
+                      "value": "{{NOW_UTC}}",
+                      "test": ""
+                    },
+                    {
+                      "operator": "equal",
+                      "type": "expression",
+                      "name": ":P2",
+                      "value": "{{query_validation.iuser_d}}",
+                      "test": ""
+                    }
+                  ]
                 }
-              ],
-              "conditional": null,
-              "valid": true
-            },
-            "returning": "iuser_d",
-            "query": "UPDATE user\nSET validated = :P1 /* {{NOW_UTC}} */\nWHERE email = :P2 /* {{$_POST.email_v}} */",
-            "params": [
-              {
-                "name": ":P1",
-                "type": "expression",
-                "value": "{{NOW_UTC}}",
-                "test": ""
               },
-              {
-                "operator": "equal",
-                "type": "expression",
-                "name": ":P2",
-                "value": "{{$_POST.email_v}}",
-                "test": ""
+              "meta": [
+                {
+                  "name": "affected",
+                  "type": "number"
+                }
+              ]
+            }
+          },
+          "else": {
+            "steps": {
+              "name": "aunothorised",
+              "module": "core",
+              "action": "response",
+              "options": {
+                "status": 410,
+                "data": "Unauthorised"
               }
-            ]
+            }
           }
         },
-        "meta": [
-          {
-            "name": "affected",
-            "type": "number"
-          }
-        ]
+        "outputType": "boolean"
       }
     ]
   }
