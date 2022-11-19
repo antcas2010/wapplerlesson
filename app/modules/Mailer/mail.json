@@ -1,6 +1,0 @@
-{
-  "name": "mymail",
-  "module": "mail",
-  "action": "setup",
-  "options": {}
-}

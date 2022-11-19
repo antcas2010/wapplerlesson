@@ -227,7 +227,7 @@
               "module": "core",
               "action": "response",
               "options": {
-                "status": 410,
+                "status": 401,
                 "data": "Unauthorised"
               }
             }

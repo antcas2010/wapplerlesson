@@ -1,0 +1,12 @@
+{
+  "name": "GMAIL",
+  "module": "mail",
+  "action": "setup",
+  "options": {
+    "host": "ssl://smtp.gmail.com",
+    "port": 465,
+    "username": "cassanos@pleiadesiot.com",
+    "password": "@@Antcas6872"
+  },
+  "output": true
+}

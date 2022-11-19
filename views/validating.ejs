@@ -13,7 +13,7 @@
     </div>
 </div>
 <div class="container">
-    <form id="form1" is="dmx-serverconnect-form" method="post" action="/api/registration/code_validation" dmx-on:success="notifies1.success('The user validated!');notifies1.browser1.goto('/')" dmx-on:unauthorized="notifies1.warning('Unauthorised!')">
+    <form id="form1" is="dmx-serverconnect-form" method="post" action="/api/registration/code_validation" dmx-on:success="notifies1.success('The user validated!');notifies1.browser1.goto('/',true,'Main Menu')" dmx-on:unauthorized="notifies1.warning('Unauthorised!')">
 
         <div class="form-group mb-3 row">
             <label for="email_input" class="col-sm-2 col-form-label">email</label>

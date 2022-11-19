@@ -394,14 +394,16 @@
         "module": "mail",
         "action": "send",
         "options": {
-          "instance": "mymail",
+          "instance": "otenet",
           "subject": "Testing",
           "fromName": "Antony",
-          "fromEmail": "antcas@cosmote.gr",
+          "fromEmail": "antcas2010@gmail.com",
           "toName": "{{$_POST.lastname+$_POST.firstname}}",
           "toEmail": "{{$_POST.email}}",
-          "body": "Your Authorisation code: {{g_mycode}}"
-        }
+          "body": "Your Authorisation code: {{g_mycode}}",
+          "replyTo": "antcas2010@gmail.com"
+        },
+        "output": true
       },
       {
         "name": "insert_role",
