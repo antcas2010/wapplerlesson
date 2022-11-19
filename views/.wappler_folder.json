@@ -6,5 +6,9 @@
   "validating.ejs": {
     "layoutPage": "main",
     "description": "Validation of registration code"
+  },
+  "login.ejs": {
+    "layoutPage": "main",
+    "description": ""
   }
 }

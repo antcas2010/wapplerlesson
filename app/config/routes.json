@@ -15,6 +15,11 @@
       "path": "/validating",
       "page": "validating",
       "layout": "main"
+    },
+    {
+      "path": "/login",
+      "page": "login",
+      "layout": "main"
     }
   ]
 }
