@@ -1,4 +1,5 @@
 <!-- Wappler include head-page="layouts/main" fontawesome_5="cdn" bootstrap5="local" is="dmx-app" id="validating" appConnect="local" components="{dmxValidator:{},dmxNotifications:{},dmxBrowser:{}}" -->
+<dmx-serverconnect id="serverconnect1" url="/api/registration/whoami"></dmx-serverconnect>
 <dmx-notifications id="notifies1">
     <div is="dmx-browser" id="browser1"></div>
 </dmx-notifications>
@@ -12,8 +13,7 @@
     </div>
 </div>
 <div class="container bg-secondary bg-opacity-10 pt-3 pb-3 ps-3 pe-3 border-3 border rounded rounded-2 border-success">
-    <form id="form1" is="dmx-serverconnect-form" method="post" action="/api/registration/code_validation" dmx-on:success="notifies1.success('The user validated!');notifies1.browser1.goto('/',true,'Main Menu')" dmx-on:unauthorized="notifies1.warning('Unauthorised!')">
-
+    <form id="form1" is="dmx-serverconnect-form" method="post" action="/api/registration/code_validation" dmx-on:success="notifies1.success('The user validated!');notifies1.browser1.goto('/',true,'Home Page')" dmx-on:unauthorized="notifies1.warning('Unauthorised!')">
         <div class="form-group mb-3 row">
             <label for="email_input" class="col-sm-2 col-form-label">email</label>
             <div class="col-sm-10">
@@ -25,6 +25,13 @@
             <div class="col-sm-10">
                 <input type="text" class="form-control" id="validation_input" name="code_v" aria-describedby="input1_help" placeholder="Enter your validation code" required="" maxlength="6" minlength="6">
             </div>
-        </div><button id="btn1" class="btn btn-primary" type="submit">Register</button>
+            <div class="col-sm-10 text-start">
+                <div class="row">
+                    <div class="col"><button id="btn1" class="btn btn-primary mt-4 pt-0" type="submit">Validate</button></div>
+                    <div class="col"><button id="btn2" class="btn mt-4 pt-0 btn-danger" type="submit" dmx-on:click="run([{serverConnect:{url:'/api/registration/send_authcode',site:'lesson_community_latest',name:'sc'}},{run:{action:`notifies1.success(\'The Authentication code sended\')`}}])">Resend Code</button></div>
+                </div>
+
+            </div>
+        </div>
     </form>
 </div>

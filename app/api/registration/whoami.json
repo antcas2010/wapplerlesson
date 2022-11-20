@@ -1,0 +1,95 @@
+[
+  {
+    "name": "identity",
+    "module": "auth",
+    "action": "identify",
+    "options": {
+      "provider": "communityweb"
+    },
+    "output": true,
+    "meta": []
+  },
+  {
+    "name": "query_who_am_i",
+    "module": "dbconnector",
+    "action": "single",
+    "options": {
+      "connection": "db",
+      "sql": {
+        "type": "SELECT",
+        "columns": [
+          {
+            "table": "user",
+            "column": "email"
+          },
+          {
+            "table": "user",
+            "column": "first_name"
+          },
+          {
+            "table": "user",
+            "column": "last_name"
+          }
+        ],
+        "params": [
+          {
+            "operator": "equal",
+            "type": "expression",
+            "name": ":P1",
+            "value": "{{identity}}",
+            "test": ""
+          }
+        ],
+        "table": {
+          "name": "user"
+        },
+        "primary": "iuser_d",
+        "joins": [],
+        "wheres": {
+          "condition": "AND",
+          "rules": [
+            {
+              "id": "user.iuser_d",
+              "field": "user.iuser_d",
+              "type": "double",
+              "operator": "equal",
+              "value": "{{identity}}",
+              "data": {
+                "table": "user",
+                "column": "iuser_d",
+                "type": "number",
+                "columnObj": {
+                  "type": "increments",
+                  "primary": true,
+                  "unique": false,
+                  "nullable": false,
+                  "name": "iuser_d"
+                }
+              },
+              "operation": "="
+            }
+          ],
+          "conditional": null,
+          "valid": true
+        },
+        "query": "SELECT email, first_name, last_name\nFROM user\nWHERE iuser_d = :P1 /* {{identity}} */"
+      }
+    },
+    "output": true,
+    "meta": [
+      {
+        "type": "text",
+        "name": "email"
+      },
+      {
+        "type": "text",
+        "name": "first_name"
+      },
+      {
+        "type": "text",
+        "name": "last_name"
+      }
+    ],
+    "outputType": "object"
+  }
+]
