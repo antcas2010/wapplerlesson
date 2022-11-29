@@ -1,0 +1,34 @@
+{
+  "meta": {
+    "$_SERVER": [
+      {
+        "type": "text",
+        "name": "URL"
+      },
+      {
+        "type": "text",
+        "ui": {
+          "label": ""
+        },
+        "name": "HTTP_HOST"
+      },
+      {
+        "type": "text",
+        "name": "SERVER_SOFTWARE"
+      }
+    ]
+  },
+  "exec": {
+    "steps": {
+      "name": "url",
+      "module": "core",
+      "action": "setvalue",
+      "options": {
+        "value": "{{$_SERVER.URL}}"
+      },
+      "meta": [],
+      "outputType": "text",
+      "output": true
+    }
+  }
+}
