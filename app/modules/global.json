@@ -44,345 +44,23 @@
   "exec": {
     "steps": [
       {
-        "name": "global_seo_query",
-        "module": "dbconnector",
-        "action": "single",
+        "name": "split_url",
+        "module": "core",
+        "action": "setvalue",
         "options": {
-          "connection": "db",
-          "sql": {
-            "type": "SELECT",
-            "columns": [
-              {
-                "table": "seo",
-                "column": "*"
-              }
-            ],
-            "params": [
-              {
-                "operator": "equal",
-                "type": "expression",
-                "name": ":P1",
-                "value": "{{$_SERVER.URL}}",
-                "test": ""
-              }
-            ],
-            "table": {
-              "name": "seo"
-            },
-            "primary": "seo_id",
-            "joins": [],
-            "wheres": {
-              "condition": "AND",
-              "rules": [
-                {
-                  "id": "seo.pagename",
-                  "field": "seo.pagename",
-                  "type": "string",
-                  "operator": "equal",
-                  "value": "{{$_SERVER.URL}}",
-                  "data": {
-                    "table": "seo",
-                    "column": "pagename",
-                    "type": "text",
-                    "columnObj": {
-                      "type": "string",
-                      "maxLength": 255,
-                      "primary": false,
-                      "unique": false,
-                      "nullable": true,
-                      "name": "pagename"
-                    }
-                  },
-                  "operation": "="
-                }
-              ],
-              "conditional": null,
-              "valid": true
-            },
-            "query": "SELECT *\nFROM seo\nWHERE pagename = :P1 /* {{$_SERVER.URL}} */"
-          }
+          "value": "{{$_SERVER.URL.split('/')}}"
         },
-        "output": true,
-        "meta": [
-          {
-            "type": "number",
-            "name": "seo_id"
-          },
-          {
-            "type": "text",
-            "name": "pagename"
-          },
-          {
-            "type": "text",
-            "name": "description"
-          },
-          {
-            "type": "text",
-            "name": "keywords"
-          },
-          {
-            "type": "text",
-            "name": "title"
-          },
-          {
-            "type": "text",
-            "name": "canonical"
-          },
-          {
-            "type": "text",
-            "name": "robots"
-          },
-          {
-            "type": "text",
-            "name": "og_title"
-          },
-          {
-            "type": "text",
-            "name": "og_description"
-          },
-          {
-            "type": "text",
-            "name": "og_image"
-          },
-          {
-            "type": "text",
-            "name": "og_type"
-          },
-          {
-            "type": "text",
-            "name": "og_sitename"
-          },
-          {
-            "type": "text",
-            "name": "twitter_title"
-          },
-          {
-            "type": "text",
-            "name": "twitter_description"
-          },
-          {
-            "type": "text",
-            "name": "twitter_image"
-          },
-          {
-            "type": "text",
-            "name": "twitter_site"
-          },
-          {
-            "type": "text",
-            "name": "twitter_creator"
-          },
-          {
-            "type": "text",
-            "name": "twitter_url"
-          },
-          {
-            "type": "text",
-            "name": "og_url"
-          }
-        ],
-        "outputType": "object"
+        "meta": [],
+        "outputType": "text"
       },
       {
         "name": "",
         "module": "core",
         "action": "condition",
         "options": {
-          "if": "{{query}}",
+          "if": "{{split_url[1]!='api'}}",
           "then": {
-            "steps": {
-              "name": "",
-              "options": {
-                "comment": "Have tags"
-              }
-            }
-          },
-          "else": {
             "steps": [
-              {
-                "name": "insert",
-                "module": "dbupdater",
-                "action": "insert",
-                "options": {
-                  "connection": "db",
-                  "sql": {
-                    "type": "insert",
-                    "values": [
-                      {
-                        "table": "seo",
-                        "column": "pagename",
-                        "type": "text",
-                        "value": "{{$_SERVER.URL}}"
-                      },
-                      {
-                        "table": "seo",
-                        "column": "description",
-                        "type": "text",
-                        "value": "visit North Type"
-                      },
-                      {
-                        "table": "seo",
-                        "column": "keywords",
-                        "type": "text",
-                        "value": "visit North Type"
-                      },
-                      {
-                        "table": "seo",
-                        "column": "title",
-                        "type": "text",
-                        "value": "visit North Type"
-                      },
-                      {
-                        "table": "seo",
-                        "column": "canonical",
-                        "type": "text",
-                        "value": "{{'https://visitnorthtype.co.uk/'+$_SERVER.URL}}"
-                      },
-                      {
-                        "table": "seo",
-                        "column": "robots",
-                        "type": "text",
-                        "value": "{{$_POST.robots}}"
-                      },
-                      {
-                        "table": "seo",
-                        "column": "og_title",
-                        "type": "text",
-                        "value": "visit North Type"
-                      },
-                      {
-                        "table": "seo",
-                        "column": "og_description",
-                        "type": "text",
-                        "value": "Website"
-                      },
-                      {
-                        "table": "seo",
-                        "column": "og_image",
-                        "type": "text",
-                        "value": "http://localhost:3000/assets/images/image1.png"
-                      },
-                      {
-                        "table": "seo",
-                        "column": "og_type",
-                        "type": "text",
-                        "value": "{{$_POST.og_type}}"
-                      },
-                      {
-                        "table": "seo",
-                        "column": "og_sitename",
-                        "type": "text",
-                        "value": "visitnorthtype.co.uk"
-                      },
-                      {
-                        "table": "seo",
-                        "column": "twitter_title",
-                        "type": "text",
-                        "value": "visit North Type"
-                      },
-                      {
-                        "table": "seo",
-                        "column": "twitter_description",
-                        "type": "text",
-                        "value": "visit North Type"
-                      },
-                      {
-                        "table": "seo",
-                        "column": "twitter_image",
-                        "type": "text",
-                        "value": "http://localhost:3000/assets/images/image1.png"
-                      },
-                      {
-                        "table": "seo",
-                        "column": "twitter_site",
-                        "type": "text",
-                        "value": "{{$_POST.twitter_site}}"
-                      },
-                      {
-                        "table": "seo",
-                        "column": "twitter_creator",
-                        "type": "text",
-                        "value": "{{$_POST.twitter_creator}}"
-                      },
-                      {
-                        "table": "seo",
-                        "column": "twitter_url",
-                        "type": "text",
-                        "value": "{{$_POST.twitter_url}}"
-                      },
-                      {
-                        "table": "seo",
-                        "column": "og_url",
-                        "type": "text",
-                        "value": "{{$_POST.og_url}}"
-                      }
-                    ],
-                    "table": "seo",
-                    "returning": "seo_id",
-                    "query": "INSERT INTO seo\n(pagename, description, keywords, title, canonical, robots, og_title, og_description, og_image, og_type, og_sitename, twitter_title, twitter_description, twitter_image, twitter_site, twitter_creator, twitter_url, og_url) VALUES (:P1 /* {{$_SERVER.URL}} */, 'visit North Type', 'visit North Type', 'visit North Type', :P2 /* {{'https://visitnorthtype.co.uk/'+$_SERVER.URL}} */, :P3 /* {{$_POST.robots}} */, 'visit North Type', 'Website', 'http://localhost:3000/assets/images/image1.png', :P4 /* {{$_POST.og_type}} */, 'visitnorthtype.co.uk', 'visit North Type', 'visit North Type', 'http://localhost:3000/assets/images/image1.png', :P5 /* {{$_POST.twitter_site}} */, :P6 /* {{$_POST.twitter_creator}} */, :P7 /* {{$_POST.twitter_url}} */, :P8 /* {{$_POST.og_url}} */)",
-                    "params": [
-                      {
-                        "name": ":P1",
-                        "type": "expression",
-                        "value": "{{$_SERVER.URL}}",
-                        "test": ""
-                      },
-                      {
-                        "name": ":P2",
-                        "type": "expression",
-                        "value": "{{'https://visitnorthtype.co.uk/'+$_SERVER.URL}}",
-                        "test": ""
-                      },
-                      {
-                        "name": ":P3",
-                        "type": "expression",
-                        "value": "{{$_POST.robots}}",
-                        "test": ""
-                      },
-                      {
-                        "name": ":P4",
-                        "type": "expression",
-                        "value": "{{$_POST.og_type}}",
-                        "test": ""
-                      },
-                      {
-                        "name": ":P5",
-                        "type": "expression",
-                        "value": "{{$_POST.twitter_site}}",
-                        "test": ""
-                      },
-                      {
-                        "name": ":P6",
-                        "type": "expression",
-                        "value": "{{$_POST.twitter_creator}}",
-                        "test": ""
-                      },
-                      {
-                        "name": ":P7",
-                        "type": "expression",
-                        "value": "{{$_POST.twitter_url}}",
-                        "test": ""
-                      },
-                      {
-                        "name": ":P8",
-                        "type": "expression",
-                        "value": "{{$_POST.og_url}}",
-                        "test": ""
-                      }
-                    ]
-                  }
-                },
-                "meta": [
-                  {
-                    "name": "identity",
-                    "type": "text"
-                  },
-                  {
-                    "name": "affected",
-                    "type": "number"
-                  }
-                ]
-              },
               {
                 "name": "global_seo_query",
                 "module": "dbconnector",
@@ -433,7 +111,8 @@
                               "name": "pagename"
                             }
                           },
-                          "operation": "="
+                          "operation": "=",
+                          "table": "seo"
                         }
                       ],
                       "conditional": null,
@@ -522,6 +201,351 @@
                   }
                 ],
                 "outputType": "object"
+              },
+              {
+                "name": "",
+                "module": "core",
+                "action": "condition",
+                "options": {
+                  "if": "{{global_seo_query}}",
+                  "then": {
+                    "steps": {
+                      "name": "",
+                      "options": {
+                        "comment": "Have tags"
+                      }
+                    }
+                  },
+                  "else": {
+                    "steps": [
+                      {
+                        "name": "insert",
+                        "module": "dbupdater",
+                        "action": "insert",
+                        "options": {
+                          "connection": "db",
+                          "sql": {
+                            "type": "insert",
+                            "values": [
+                              {
+                                "table": "seo",
+                                "column": "pagename",
+                                "type": "text",
+                                "value": "{{$_SERVER.URL}}"
+                              },
+                              {
+                                "table": "seo",
+                                "column": "description",
+                                "type": "text",
+                                "value": "visit North Type"
+                              },
+                              {
+                                "table": "seo",
+                                "column": "keywords",
+                                "type": "text",
+                                "value": "visit North Type"
+                              },
+                              {
+                                "table": "seo",
+                                "column": "title",
+                                "type": "text",
+                                "value": "visit North Type"
+                              },
+                              {
+                                "table": "seo",
+                                "column": "canonical",
+                                "type": "text",
+                                "value": "{{'https://visitnorthtype.co.uk/'+$_SERVER.URL}}"
+                              },
+                              {
+                                "table": "seo",
+                                "column": "robots",
+                                "type": "text",
+                                "value": "{{$_POST.robots}}"
+                              },
+                              {
+                                "table": "seo",
+                                "column": "og_title",
+                                "type": "text",
+                                "value": "visit North Type"
+                              },
+                              {
+                                "table": "seo",
+                                "column": "og_description",
+                                "type": "text",
+                                "value": "Website"
+                              },
+                              {
+                                "table": "seo",
+                                "column": "og_image",
+                                "type": "text",
+                                "value": "http://localhost:3000/assets/images/image1.png"
+                              },
+                              {
+                                "table": "seo",
+                                "column": "og_type",
+                                "type": "text",
+                                "value": "{{$_POST.og_type}}"
+                              },
+                              {
+                                "table": "seo",
+                                "column": "og_sitename",
+                                "type": "text",
+                                "value": "visitnorthtype.co.uk"
+                              },
+                              {
+                                "table": "seo",
+                                "column": "twitter_title",
+                                "type": "text",
+                                "value": "visit North Type"
+                              },
+                              {
+                                "table": "seo",
+                                "column": "twitter_description",
+                                "type": "text",
+                                "value": "visit North Type"
+                              },
+                              {
+                                "table": "seo",
+                                "column": "twitter_image",
+                                "type": "text",
+                                "value": "http://localhost:3000/assets/images/image1.png"
+                              },
+                              {
+                                "table": "seo",
+                                "column": "twitter_site",
+                                "type": "text",
+                                "value": "{{$_POST.twitter_site}}"
+                              },
+                              {
+                                "table": "seo",
+                                "column": "twitter_creator",
+                                "type": "text",
+                                "value": "{{$_POST.twitter_creator}}"
+                              },
+                              {
+                                "table": "seo",
+                                "column": "twitter_url",
+                                "type": "text",
+                                "value": "{{$_POST.twitter_url}}"
+                              },
+                              {
+                                "table": "seo",
+                                "column": "og_url",
+                                "type": "text",
+                                "value": "{{$_POST.og_url}}"
+                              }
+                            ],
+                            "table": "seo",
+                            "returning": "seo_id",
+                            "query": "INSERT INTO seo\n(pagename, description, keywords, title, canonical, robots, og_title, og_description, og_image, og_type, og_sitename, twitter_title, twitter_description, twitter_image, twitter_site, twitter_creator, twitter_url, og_url) VALUES (:P1 /* {{$_SERVER.URL}} */, 'visit North Type', 'visit North Type', 'visit North Type', :P2 /* {{'https://visitnorthtype.co.uk/'+$_SERVER.URL}} */, :P3 /* {{$_POST.robots}} */, 'visit North Type', 'Website', 'http://localhost:3000/assets/images/image1.png', :P4 /* {{$_POST.og_type}} */, 'visitnorthtype.co.uk', 'visit North Type', 'visit North Type', 'http://localhost:3000/assets/images/image1.png', :P5 /* {{$_POST.twitter_site}} */, :P6 /* {{$_POST.twitter_creator}} */, :P7 /* {{$_POST.twitter_url}} */, :P8 /* {{$_POST.og_url}} */)",
+                            "params": [
+                              {
+                                "name": ":P1",
+                                "type": "expression",
+                                "value": "{{$_SERVER.URL}}",
+                                "test": ""
+                              },
+                              {
+                                "name": ":P2",
+                                "type": "expression",
+                                "value": "{{'https://visitnorthtype.co.uk/'+$_SERVER.URL}}",
+                                "test": ""
+                              },
+                              {
+                                "name": ":P3",
+                                "type": "expression",
+                                "value": "{{$_POST.robots}}",
+                                "test": ""
+                              },
+                              {
+                                "name": ":P4",
+                                "type": "expression",
+                                "value": "{{$_POST.og_type}}",
+                                "test": ""
+                              },
+                              {
+                                "name": ":P5",
+                                "type": "expression",
+                                "value": "{{$_POST.twitter_site}}",
+                                "test": ""
+                              },
+                              {
+                                "name": ":P6",
+                                "type": "expression",
+                                "value": "{{$_POST.twitter_creator}}",
+                                "test": ""
+                              },
+                              {
+                                "name": ":P7",
+                                "type": "expression",
+                                "value": "{{$_POST.twitter_url}}",
+                                "test": ""
+                              },
+                              {
+                                "name": ":P8",
+                                "type": "expression",
+                                "value": "{{$_POST.og_url}}",
+                                "test": ""
+                              }
+                            ]
+                          }
+                        },
+                        "meta": [
+                          {
+                            "name": "identity",
+                            "type": "text"
+                          },
+                          {
+                            "name": "affected",
+                            "type": "number"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "global_seo_query",
+                        "module": "dbconnector",
+                        "action": "single",
+                        "options": {
+                          "connection": "db",
+                          "sql": {
+                            "type": "SELECT",
+                            "columns": [
+                              {
+                                "table": "seo",
+                                "column": "*"
+                              }
+                            ],
+                            "params": [
+                              {
+                                "operator": "equal",
+                                "type": "expression",
+                                "name": ":P1",
+                                "value": "{{$_SERVER.URL}}",
+                                "test": ""
+                              }
+                            ],
+                            "table": {
+                              "name": "seo"
+                            },
+                            "primary": "seo_id",
+                            "joins": [],
+                            "wheres": {
+                              "condition": "AND",
+                              "rules": [
+                                {
+                                  "id": "seo.pagename",
+                                  "field": "seo.pagename",
+                                  "type": "string",
+                                  "operator": "equal",
+                                  "value": "{{$_SERVER.URL}}",
+                                  "data": {
+                                    "table": "seo",
+                                    "column": "pagename",
+                                    "type": "text",
+                                    "columnObj": {
+                                      "type": "string",
+                                      "maxLength": 255,
+                                      "primary": false,
+                                      "unique": false,
+                                      "nullable": true,
+                                      "name": "pagename"
+                                    }
+                                  },
+                                  "operation": "="
+                                }
+                              ],
+                              "conditional": null,
+                              "valid": true
+                            },
+                            "query": "SELECT *\nFROM seo\nWHERE pagename = :P1 /* {{$_SERVER.URL}} */"
+                          }
+                        },
+                        "output": true,
+                        "meta": [
+                          {
+                            "type": "number",
+                            "name": "seo_id"
+                          },
+                          {
+                            "type": "text",
+                            "name": "pagename"
+                          },
+                          {
+                            "type": "text",
+                            "name": "description"
+                          },
+                          {
+                            "type": "text",
+                            "name": "keywords"
+                          },
+                          {
+                            "type": "text",
+                            "name": "title"
+                          },
+                          {
+                            "type": "text",
+                            "name": "canonical"
+                          },
+                          {
+                            "type": "text",
+                            "name": "robots"
+                          },
+                          {
+                            "type": "text",
+                            "name": "og_title"
+                          },
+                          {
+                            "type": "text",
+                            "name": "og_description"
+                          },
+                          {
+                            "type": "text",
+                            "name": "og_image"
+                          },
+                          {
+                            "type": "text",
+                            "name": "og_type"
+                          },
+                          {
+                            "type": "text",
+                            "name": "og_sitename"
+                          },
+                          {
+                            "type": "text",
+                            "name": "twitter_title"
+                          },
+                          {
+                            "type": "text",
+                            "name": "twitter_description"
+                          },
+                          {
+                            "type": "text",
+                            "name": "twitter_image"
+                          },
+                          {
+                            "type": "text",
+                            "name": "twitter_site"
+                          },
+                          {
+                            "type": "text",
+                            "name": "twitter_creator"
+                          },
+                          {
+                            "type": "text",
+                            "name": "twitter_url"
+                          },
+                          {
+                            "type": "text",
+                            "name": "og_url"
+                          }
+                        ],
+                        "outputType": "object"
+                      }
+                    ]
+                  }
+                },
+                "outputType": "boolean"
               }
             ]
           }

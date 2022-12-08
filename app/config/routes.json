@@ -20,6 +20,11 @@
       "path": "/login",
       "page": "login",
       "layout": "main"
+    },
+    {
+      "path": "/cw_admin/admin_main",
+      "page": "cw_admin/admin_main",
+      "layout": "admin"
     }
   ]
 }
