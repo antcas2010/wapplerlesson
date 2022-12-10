@@ -22,9 +22,10 @@
       "layout": "main"
     },
     {
-      "path": "/cw_admin/admin_main",
-      "page": "cw_admin/admin_main",
-      "layout": "admin"
+      "path": "/cw_admin/admin_mani_page",
+      "page": "cw_admin/admin_mani_page",
+      "layout": "admin",
+      "exec": "/api/admin/isadmin"
     }
   ]
 }

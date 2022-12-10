@@ -2,5 +2,9 @@
   "admin_main.ejs": {
     "layoutPage": "admin",
     "description": ""
+  },
+  "admin_mani_page.ejs": {
+    "layoutPage": "admin",
+    "description": ""
   }
 }

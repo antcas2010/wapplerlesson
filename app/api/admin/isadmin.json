@@ -1,0 +1,13 @@
+{
+  "name": "",
+  "module": "auth",
+  "action": "restrict",
+  "options": {
+    "provider": "communityweb",
+    "permissions": [
+      "Administrator"
+    ],
+    "loginUrl": "/login",
+    "forbiddenUrl": "/login"
+  }
+}

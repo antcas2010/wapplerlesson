@@ -401,22 +401,6 @@
         ]
       },
       {
-        "name": "",
-        "module": "mail",
-        "action": "send",
-        "options": {
-          "instance": "otenet",
-          "subject": "Testing",
-          "fromName": "Antony",
-          "fromEmail": "antcas2010@gmail.com",
-          "toName": "{{$_POST.lastname+$_POST.firstname}}",
-          "toEmail": "{{$_POST.email}}",
-          "body": "Your Authorisation code: {{g_mycode}}",
-          "replyTo": "antcas2010@gmail.com"
-        },
-        "output": true
-      },
-      {
         "name": "insert_role",
         "module": "dbupdater",
         "action": "insert",
@@ -461,10 +445,26 @@
             "type": "number"
           }
         ]
+      },
+      {
+        "name": "",
+        "module": "mail",
+        "action": "send",
+        "options": {
+          "instance": "otenet",
+          "subject": "Testing",
+          "fromName": "Antony",
+          "fromEmail": "antcas2010@gmail.com",
+          "toName": "{{$_POST.lastname+$_POST.firstname}}",
+          "toEmail": "{{$_POST.email}}",
+          "body": "Your Authorisation code: {{g_mycode}}",
+          "replyTo": "antcas2010@gmail.com"
+        },
+        "output": true
       }
     ]
   },
   "usedModules": {
-    "argon2": "^0.28.3"
+    "argon2": "^0.30.2"
   }
 }
