@@ -27,5 +27,10 @@
       "layout": "admin",
       "exec": "/api/admin/isadmin"
     }
-  ]
+  ],
+  "layouts": {
+    "admin": {
+      "exec": "/api/security/isadmin"
+    }
+  }
 }
